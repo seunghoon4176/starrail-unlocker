@@ -9,7 +9,7 @@ import subprocess
 import webbrowser
 
 CURRENT_VERSION = "1.0.0"
-GITHUB_API = "https://api.github.com/repos/seunghoon4176/starrail-gacha-tracker/releases/latest"
+GITHUB_API = "https://api.github.com/repos/seunghoon4176/starrail-unlocker/releases/latest"
 
 # PyInstaller 리소스 경로 처리
 def resource_path(relative_path):
@@ -28,18 +28,12 @@ class StarRailUnlockerApp:
         ctk.set_appearance_mode("system")
         ctk.set_default_color_theme("blue")
 
-        # 아이콘 적용 (여러 경로 시도)
+        # 아이콘 적용 (PyInstaller/개발환경 모두 지원)
         try:
-            icon_paths = [
-                resource_path("images/anaxa.ico"),
-                resource_path("anaxa.ico"),
-                "images/anaxa.ico",
-                "anaxa.ico"
-            ]
-            for icon_path in icon_paths:
-                if os.path.exists(icon_path):
-                    self.root.iconbitmap(icon_path)
-                    break
+            try:
+                self.root.iconbitmap(resource_path("images/anaxa.ico"))
+            except Exception:
+                self.root.iconbitmap(resource_path("anaxa.ico"))
         except Exception:
             pass
 
@@ -139,7 +133,7 @@ class StarRailUnlockerApp:
                             except Exception as e:
                                 messagebox.showerror("업데이트 실패", f"다운로드 또는 실행 중 오류 발생:\n{e}")
                     else:
-                        url = data.get("html_url", "https://github.com/seunghoon4176/starrail-gacha-tracker/releases")
+                        url = data.get("html_url", "https://github.com/seunghoon4176/starrail-unlocker/releases")
                         msg = f"새 버전이 있습니다: {latest_ver}\n\n업데이트 페이지로 이동할까요?"
                         if messagebox.askyesno("업데이트 알림", msg):
                             webbrowser.open(url)
