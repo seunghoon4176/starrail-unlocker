@@ -1,4 +1,40 @@
-def unlock_120fps(self):
+
+import customtkinter as ctk
+from tkinter import messagebox
+import os
+import sys
+import requests
+import tempfile
+import subprocess
+import webbrowser
+
+CURRENT_VERSION = "1.0.0"
+GITHUB_API = "https://api.github.com/repos/seunghoon4176/starrail-gacha-tracker/releases/latest"
+
+# PyInstaller 리소스 경로 처리
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+class StarRailUnlockerApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Star Rail 120FPS Unlocker")
+        self.root.geometry("400x200")
+        ctk.set_appearance_mode("system")
+        ctk.set_default_color_theme("blue")
+
+
+        self.unlock_btn = ctk.CTkButton(self.root, text="120FPS 언락", command=self.unlock_120fps)
+        self.unlock_btn.pack(pady=40)
+
+        # 앱 시작 시 업데이트 체크
+        self.check_update_on_startup()
+
+    def unlock_120fps(self):
         """Star Rail FPS 제한을 120으로 언락 (레지스트리 수정)"""
         try:
             import winreg
@@ -54,7 +90,8 @@ def unlock_120fps(self):
         except Exception as e:
             messagebox.showerror("120 FPS 언락 실패", f"오류 발생: {e}")
 
-def check_update_on_startup(self):
+
+    def check_update_on_startup(self):
         """GitHub 릴리즈에서 최신 버전 확인 및 자동 다운로드/실행 안내"""
         try:
             resp = requests.get(GITHUB_API, timeout=5)
@@ -81,7 +118,6 @@ def check_update_on_startup(self):
                                         for chunk in r.iter_content(chunk_size=8192):
                                             f.write(chunk)
                                 messagebox.showinfo("다운로드 완료", f"새 버전이 다운로드되었습니다.\n프로그램을 종료하고 새 버전을 실행합니다.")
-                                # 업데이트 공지(릴리즈 노트) 표시
                                 self.show_update_notice_after_update(body, latest_ver)
                                 subprocess.Popen([local_path])
                                 self.root.destroy()
@@ -118,3 +154,11 @@ def check_update_on_startup(self):
         notice_text.pack(fill="both", expand=True, padx=20, pady=20)
         notice_text.insert("0.0", msg)
         notice_text.configure(state="disabled")
+
+
+
+
+if __name__ == "__main__":
+    root = ctk.CTk()
+    app = StarRailUnlockerApp(root)
+    root.mainloop()
