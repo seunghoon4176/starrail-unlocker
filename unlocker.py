@@ -22,11 +22,26 @@ def resource_path(relative_path):
 class StarRailUnlockerApp:
     def __init__(self, root):
         self.root = root
-        self.root.title("Star Rail 120FPS Unlocker")
-        self.root.geometry("400x200")
+        self.root.title("120fps 언락커")
+        self.root.geometry("250x100")
+        self.root.resizable(False, False)  # 창 크기 고정
         ctk.set_appearance_mode("system")
         ctk.set_default_color_theme("blue")
 
+        # 아이콘 적용 (여러 경로 시도)
+        try:
+            icon_paths = [
+                resource_path("images/anaxa.ico"),
+                resource_path("anaxa.ico"),
+                "images/anaxa.ico",
+                "anaxa.ico"
+            ]
+            for icon_path in icon_paths:
+                if os.path.exists(icon_path):
+                    self.root.iconbitmap(icon_path)
+                    break
+        except Exception:
+            pass
 
         self.unlock_btn = ctk.CTkButton(self.root, text="120FPS 언락", command=self.unlock_120fps)
         self.unlock_btn.pack(pady=40)
